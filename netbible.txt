@@ -3,7 +3,7 @@ Switch(config)# interface f0/3
 Switch(config-if-range)# switchport access vlan 101
 
 -VLAN Group example:
-Switch(config)# interface range f0/1 – 6
+Switch(config)# interface range f0/1 â€“ 6
 Switch(config-if-range)# switchport access vlan 101
 
 -Configuring trunk ports:
@@ -149,5 +149,3 @@ change dialplan analysis
 
 Analog port: 001V40[port num of avaya analog card here] ex. 001V401
 Digital port: 001V30[port num of avaya digital card here] ex. 001V301
-
-VOIP Port: S00[
