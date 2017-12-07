@@ -149,3 +149,7 @@ change dialplan analysis
 
 Analog port: 001V40[port num of avaya analog card here] ex. 001V401
 Digital port: 001V30[port num of avaya digital card here] ex. 001V301
+
+Avaya 4610 phone commands:
+MUTE 73738# -reset phone
+MUTE 744# - change protocol
