@@ -1,0 +1,153 @@
+-VLAN One at a time example:
+Switch(config)# interface f0/3
+Switch(config-if-range)# switchport access vlan 101
+
+-VLAN Group example:
+Switch(config)# interface range f0/1 – 6
+Switch(config-if-range)# switchport access vlan 101
+
+-Configuring trunk ports:
+interface [insert port here] 
+switchport mode trunk
+switchport trunk encapsulation dot1q
+[optional, for voip]spanning-tree portfast trunk
+
+-configure to allow specific vlans on trunk:
+switchport trunk allow vlan [insert vlan here]
+
+-Portfast config
+int [int ID here]
+spanning-tree portfast
+
+-IMAGE FILES
+tftp-server [insert filename here]
+load 7961 TERM41.7-0-3-0S
+
+-setup line for phones
+config t
+telephony-service
+max-ephones [insert max # of phones here]
+max-dn [insert max # of dial numbers here]
+ip source-address [insert IP of interface here] port 2000
+system message [insert message here]
+create cnf-files
+exit
+
+
+-dial numbers config
+config t
+ephone-dn [insert # of dial number here] dual-line/octo-line
+number [insert dial number here]
+exit
+
+-phones + MAC Addreses
+config t
+ephone [insert # of phone here]
+mac-add [insert MAC of phone here] HHHH.HHHH.HHHH
+button 1:[insert # of phone here] ex. button 1:1, button 1:2, button 1:3, etc.
+exit
+
+-Voice VLAN (switch)
+config t
+int [int ID here]
+switchport voice vlan [insert VLAN ID here]
+exit
+show int [int ID here] switchport
+
+-show commands for voip:
+show ephones
+show call active
+show call active voice
+show call active voice brief
+
+Configure NTP:
+show ntp
+clock timezone [insert timezone here ex. Pacific, Eastern, etc.] [insert hours for UTC ex. -5 for eastern]
+ntp server [ip add of ntp server here] 
+clock summer-time [insert timezone here ex. PDT, EDT, etc.]
+summertime recurring
+show summertime
+clear ntp server [ntp server here]
+
+-DHCP on router
+router(config)# ip dhcp excluded-address [insert excluded addresses here]
+		ip dhcp pool [name of dhcp pool]
+		default-router [insert IP of interface here]
+		network [network address here] [mask here]
+		option 150 ip [insert IP from above here]
+
+
+-AP config
+ap(config)#int dot11radio[0/]
+ap(config-if)#ssid [insert ssid here]
+ap(config-if-ssid)#auth open
+ap(config-if-ssid)#no shut
+
+ap(config)#dot11 ssid Calvin0
+ap(config-ssid)#guest-mode
+ap(config-ssid)#exi
+
+int dot11radio[0/1]
+antenna receive diversity
+antenna transmit diversity
+
+
+
+-DELETE VLAN
+delete flash:vlan.dat
+
+monitor session:
+monitor session 1 source interface [source int here] ("rx" at the end if a range of int are used)
+monitor session 1 destination interface [destination int here] 
+
+Show call:
+show call active voice
+show call history voice
+
+sub interface router:
+encapsulation dot1q [vlan ID here]
+ip add [ip here]
+
+NAT + ACL:
+
+int fa0/0
+ip address dhcp
+ip nat outside
+
+Router(config)#int fa0/1.5
+Router(config-subif)#ip nat inside
+Router(config-subif)#exi
+Router(config)#int fa0/1.6
+Router(config-subif)#ip nat inside
+
+Router(config-subif)#ip nat inside source list 10 inter [outside router int : fa0/0] overload
+
+
+Router(config)#access-list 10 permit 192.168.5.0 0.0.0.255
+Router(config)#access-list 10 permit 192.168.6.0 0.0.0.255
+
+show access-list
+
+Static Route Config:
+ip route [dest network address] [subnet mask] [next hop address]
+
+OSPF Config
+Router(config)#router ospf [enter process-id here. can be anything. I'll say 5]
+Router(config-router)#network [insert network address] [area-ID here. I'll say 20]
+
+Router:
+show ip route
+erase startup-config
+no ip domain lookup
+
+avaya voip + traditional:
+add station [ext]
+list station
+
+display dialplan analysis
+change dialplan analysis
+
+Analog port: 001V40[port num of avaya analog card here] ex. 001V401
+Digital port: 001V30[port num of avaya digital card here] ex. 001V301
+
+VOIP Port: S00[
