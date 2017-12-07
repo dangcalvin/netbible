@@ -8,11 +8,12 @@ Switch(config-if-range)# switchport access vlan 101
 
 -Configuring trunk ports:
 interface [insert port here] 
-switchport mode trunk
 switchport trunk encapsulation dot1q
+switchport mode trunk
 [optional, for voip]spanning-tree portfast trunk
 
 -configure to allow specific vlans on trunk:
+interface [insert port here] 
 switchport trunk allow vlan [insert vlan here]
 
 -Portfast config
@@ -21,11 +22,13 @@ spanning-tree portfast
 
 -IMAGE FILES
 tftp-server [insert filename here]
-load 7961 TERM41.7-0-3-0S
+
 
 -setup line for phones
 config t
 telephony-service
+load 7961 TERM41.7-0-3-0S
+max-conferences 8 gain 6
 max-ephones [insert max # of phones here]
 max-dn [insert max # of dial numbers here]
 ip source-address [insert IP of interface here] port 2000
@@ -55,18 +58,20 @@ exit
 show int [int ID here] switchport
 
 -show commands for voip:
-show ephones
+show ephone [insert phone model number here. ie. 7961]
 show call active
 show call active voice
 show call active voice brief
 
+show call history voice brief
+
 Configure NTP:
-show ntp
+show ntp associations/status
 clock timezone [insert timezone here ex. Pacific, Eastern, etc.] [insert hours for UTC ex. -5 for eastern]
 ntp server [ip add of ntp server here] 
-clock summer-time [insert timezone here ex. PDT, EDT, etc.]
+clock summer-time [insert timezone here ex. PDT, EDT, etc.] recurring
 summertime recurring
-show summertime
+show clock
 clear ntp server [ntp server here]
 
 -DHCP on router
@@ -78,11 +83,11 @@ router(config)# ip dhcp excluded-address [insert excluded addresses here]
 
 
 -AP config
-ap(config)#int dot11radio[0/]
+ap(config)#int dot11radio[0/1]
 ap(config-if)#ssid [insert ssid here]
 ap(config-if-ssid)#auth open
 ap(config-if-ssid)#no shut
-
+exit
 ap(config)#dot11 ssid Calvin0
 ap(config-ssid)#guest-mode
 ap(config-ssid)#exi
@@ -114,14 +119,15 @@ int fa0/0
 ip address dhcp
 ip nat outside
 
+Router sub interfaces:
 Router(config)#int fa0/1.5
 Router(config-subif)#ip nat inside
 Router(config-subif)#exi
 Router(config)#int fa0/1.6
 Router(config-subif)#ip nat inside
-
+Router(config)#int fa0/[int of router inside int here] maybe fa0/1.5 for example
 Router(config-subif)#ip nat inside source list 10 inter [outside router int : fa0/0] overload
-
+                                                                                                                                                                                                                                                                                           
 
 Router(config)#access-list 10 permit 192.168.5.0 0.0.0.255
 Router(config)#access-list 10 permit 192.168.6.0 0.0.0.255
@@ -130,6 +136,12 @@ show access-list
 
 Static Route Config:
 ip route [dest network address] [subnet mask] [next hop address]
+
+
+Router dial peer:
+dial-peer voice 1 voip
+ destination-pattern 3335555 (or so something like 333....)
+ session target ipv4:[ip of other call server]
 
 OSPF Config
 Router(config)#router ospf [enter process-id here. can be anything. I'll say 5]
@@ -150,6 +162,12 @@ change dialplan analysis
 Analog port: 001V40[port num of avaya analog card here] ex. 001V401
 Digital port: 001V30[port num of avaya digital card here] ex. 001V301
 
-Avaya 4610 phone commands:
-MUTE 73738# -reset phone
-MUTE 744# - change protocol
+Router NTP Version 2 (set outside int to "ip address dhcp"):
+Router(config)#ntp master 5
+Router(config)#ntp server [insert ntp server here] ex. 129.6.15.28
+Router(config)#ntp server [ip address of inside router interface] source [router interface]
+
+PC IP renew/release:
+
+ipconfig /renew
+ipconfig /release
