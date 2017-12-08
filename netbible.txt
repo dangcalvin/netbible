@@ -52,6 +52,18 @@ mac-add [insert MAC of phone here] HHHH.HHHH.HHHH
 button 1:[insert # of phone here] ex. button 1:1, button 1:2, button 1:3, etc.
 exit
 
+T1 Config:
+conf t
+[int] controller T1 0/0/0
+framing esf
+cablelength short 133
+linecode b8zs
+channel-group 1 timeslots 1-24
+
+(check ints on router for correct serial int)
+int serial 0/0/0:1
+ip add [IP add] [mask] 
+
 -Voice VLAN (switch)
 config t
 int [int ID here]
