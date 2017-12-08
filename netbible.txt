@@ -155,6 +155,26 @@ Router(config)#access-list 10 permit 192.168.6.0 0.0.0.255
 
 show access-list
 
+
+NAT Pool Config:
+Router(config)#clock timezone EST [insert timezone ex.. '-5']
+Router(config)#int fa0/0
+Router(config-if)#ip address dhcp
+Router(config-if)#ip nat outside
+
+Router sub interfaces:
+Router(config)#int fa0/[inteface number].[vlan ID here]
+Router(config-subif)#ip nat inside
+Router(config-subif)#exi
+Router(config)#int fa0/[inteface number].[vlan ID here]
+Router(config-subif)#ip nat inside
+
+Router(config)# ip nat pool [insert name here] [ip address of fa0/0] [ip address of fa0/0 or specify range] netmask [insert subnet mask here]
+Router(config)# ip nat inside source list [insert number here] pool [insert name of pool here] overload
+
+
+
+
 **
 *Situational NAT + ACL config using subinterfaces and DHCP:
 *
