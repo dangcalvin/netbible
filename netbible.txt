@@ -76,6 +76,13 @@ summertime recurring
 show clock
 clear ntp server [ntp server here]
 
+Router NTP Version 2 (set outside int to "ip address dhcp"):
+
+Router(config)#feature ntp (enable ntp?)
+Router(config)#ntp master [enter stratum here. can be 1-15]
+Router(config)#ntp server [insert ntp server here] ex. 129.6.15.28
+Router(config)#ntp server [ip address of inside router interface] source [router interface]
+
 -DHCP on router
 router(config)# ip dhcp excluded-address [insert excluded addresses here]
 		ip dhcp pool [name of dhcp pool]
@@ -136,6 +143,28 @@ Router(config)#access-list 10 permit 192.168.6.0 0.0.0.255
 
 show access-list
 
+**
+*Situational NAT + ACL config using subinterfaces and DHCP:
+*
+*int fa0/0
+*ip address dhcp
+*ip nat outside
+*
+*Router(config)#int fa0/1.5
+*Router(config-subif)#ip nat inside
+*Router(config-subif)#exit
+*Router(config)#int fa0/1.6
+*Router(config-subif)#ip nat inside
+*
+*Router(config)#int fa0/1.5
+*Router(config-subif)#ip nat inside source list 10 inter fa0/0 overload
+*
+*
+*Router(config)#access-list 10 permit 192.168.5.0 0.0.0.255
+*Router(config)#access-list 10 permit 192.168.6.0 0.0.0.255
+**
+
+
 Static Route Config:
 ip route [dest network address] [subnet mask] [next hop address]
 
@@ -164,10 +193,7 @@ change dialplan analysis
 Analog port: 001V40[port num of avaya analog card here] ex. 001V401
 Digital port: 001V30[port num of avaya digital card here] ex. 001V301
 
-Router NTP Version 2 (set outside int to "ip address dhcp"):
-Router(config)#ntp master 5
-Router(config)#ntp server [insert ntp server here] ex. 129.6.15.28
-Router(config)#ntp server [ip address of inside router interface] source [router interface]
+
 
 PC IP renew/release:
 
