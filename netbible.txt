@@ -84,7 +84,6 @@ show ntp associations/status
 clock timezone [insert timezone here ex. Pacific, Eastern, etc.] [insert hours for UTC ex. -5 for eastern]
 ntp server [ip add of ntp server here] 
 clock summer-time [insert timezone here ex. PDT, EDT, etc.] recurring
-summertime recurring
 show clock
 clear ntp server [ntp server here]
 
