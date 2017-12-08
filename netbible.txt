@@ -1,3 +1,5 @@
+﻿Author: Calvin Dang
+
 -VLAN One at a time example:
 Switch(config)# interface f0/3
 Switch(config-if-range)# switchport access vlan 101
