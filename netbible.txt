@@ -1,4 +1,4 @@
-﻿Author: Calvin Dang
+﻿-Author: Calvin Dang
 
 -VLAN One at a time example:
 Switch(config)# interface f0/3
@@ -89,6 +89,7 @@ router(config)# ip dhcp excluded-address [insert excluded addresses here]
 		default-router [insert IP of interface here]
 		network [network address here] [mask here]
 		option 150 ip [insert IP from above here]
+		option 176 ascii "mcipadd=192.168.16.1,tftpsrvr=192.168.16.10"
 
 
 -AP config
